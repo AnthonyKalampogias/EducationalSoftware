@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<style>
+    td, tr, th {
+        text-align: center;
+        padding: 15px;
+    }
+</style>
+
+<h2>Welcome to the Educational Software Platform</h2>
+@if (string.IsNullOrEmpty(Session["id"].ToString()))
+{
+    <h5 style="padding-bottom: 10px;">In order to use a user's type function you first must login !</h5>
+}
+else
+{
+    <h5> What would you like to do?</h5>
+
+    <div>
+        <table class="table">
+            <tr>
+                <th>
+                    Μαθήματα
+                </th>
+                <th>
+                    Test
+                </th>
+                <th>
+                    Report
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.ActionLink("Μαθε για Singleton", "Index", "Content", new { contentID = 1 })
+                </td>
+                <td>
+                    @Html.ActionLink("xxxx", "Index", "Content", new { contentID = 2 })
+                </td>
+                <td>
+                    @Html.ActionLink("xxxx", "Index", "Content", new { contentID = 3 })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.ActionLink("Μαθε για SOLID", "Index", "Content", new { contentID = 2 })
+                </td>
+                <td>
+                    @Html.ActionLink("xxxx", "GetAppointment", "Doctor")
+                </td>
+                <td>
+                    @Html.ActionLink("xxxx", "CreateDoctor", "Admin")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.ActionLink("Μαθε για C#", "Index", "Content", new { contentID = 3 })
+                </td>
+                <td>
+                    @Html.ActionLink("xxxx", "DoctorRegisterProfession", "Doctor")
+                </td>
+                <td>
+                    @Html.ActionLink("xxxx", "CreatePatient", "Admin")
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+

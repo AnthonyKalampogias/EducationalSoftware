@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors Office</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Educational Software", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse" style="float:right">
+                <ul class="nav navbar-nav">
+                    @if (string.IsNullOrEmpty(Session["id"].ToString()))
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "UserAccess")</li>
+                        <li>@Html.ActionLink("Register", "Register", "UserAccess")</li>
+                    }
+                    else
+                    {
+                        <li style="font-family: -webkit-pictograph; padding-left: 56px; color: white; " class="navbar-brand">@Session["name"]</li>
+                        <li style="padding-top: 2px; padding-bottom: 0px" class="navbar-brand">@Html.ActionLink("Logout", "Logout", "UserAccess")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Educational Software</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

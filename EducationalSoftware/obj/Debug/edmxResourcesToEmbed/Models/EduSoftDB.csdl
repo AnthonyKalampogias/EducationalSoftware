@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SoftwareEduModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Content">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ChapContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Tests" Relationship="Self.FK_Tests_Content" FromRole="Content" ToRole="Tests" />
+  </EntityType>
+  <EntityType Name="Scores">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TestID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Score" Type="Int32" Nullable="false" />
+    <Property Name="Suggestion" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tests" Relationship="Self.FK_Scores_Tests" FromRole="Scores" ToRole="Tests" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_Scores_Users" FromRole="Scores" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Tests">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Chapter" Type="Int32" Nullable="false" />
+    <Property Name="Question" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="answerA" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="answerB" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="answerC" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Content" Relationship="Self.FK_Tests_Content" FromRole="Tests" ToRole="Content" />
+    <NavigationProperty Name="Scores" Relationship="Self.FK_Scores_Tests" FromRole="Tests" ToRole="Scores" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Scores" Relationship="Self.FK_Scores_Users" FromRole="Users" ToRole="Scores" />
+  </EntityType>
+  <Association Name="FK_Tests_Content">
+    <End Role="Content" Type="Self.Content" Multiplicity="1" />
+    <End Role="Tests" Type="Self.Tests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Content">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Tests">
+        <PropertyRef Name="Chapter" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Scores_Tests">
+    <End Role="Tests" Type="Self.Tests" Multiplicity="1" />
+    <End Role="Scores" Type="Self.Scores" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tests">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Scores">
+        <PropertyRef Name="TestID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Scores_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Scores" Type="Self.Scores" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Scores">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SoftwareEduEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Content" EntityType="Self.Content" />
+    <EntitySet Name="Scores" EntityType="Self.Scores" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Tests" EntityType="Self.Tests" />
+    <EntitySet Name="Users" EntityType="Self.Users" />
+    <AssociationSet Name="FK_Tests_Content" Association="Self.FK_Tests_Content">
+      <End Role="Content" EntitySet="Content" />
+      <End Role="Tests" EntitySet="Tests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Scores_Tests" Association="Self.FK_Scores_Tests">
+      <End Role="Tests" EntitySet="Tests" />
+      <End Role="Scores" EntitySet="Scores" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Scores_Users" Association="Self.FK_Scores_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Scores" EntitySet="Scores" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
