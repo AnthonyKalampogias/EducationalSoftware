@@ -31,7 +31,10 @@ namespace EducationalSoftware.Controllers
                 ViewData["error"] = "You need to select a chapter to start a quiz!";
                 return RedirectToAction("Index", "Home");
             }
-            return View();
+            var questionList = new List<Tests>();
+            using (var db = new SoftwareEduEntities())
+                questionList = db.Tests.Where(x => x.Chapter == contentID).ToList();
+            return View(questionList);
         }
     }
 }
