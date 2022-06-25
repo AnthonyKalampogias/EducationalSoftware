@@ -1,6 +1,7 @@
 ﻿using EducationalSoftware.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -33,8 +34,14 @@ namespace EducationalSoftware.Controllers
             }
             var questionList = new List<Tests>();
             using (var db = new SoftwareEduEntities())
-                questionList = db.Tests.Where(x => x.Chapter == contentID).ToList();
+                questionList = db.Tests.Where(x => x.Chapter == contentID).Include(x => x.Content).ToList();
             return View(questionList);
+        }
+
+        [HttpPost]
+        public ActionResult submitAnswers(string values)
+        {
+            return View("Quiz");
         }
     }
 }

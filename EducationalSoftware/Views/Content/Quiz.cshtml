@@ -3,30 +3,60 @@
 @{
     ViewBag.Title = "Quiz";
 }
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+    var ids = [];
+    //get all the question IDs
+    @foreach (var d in Model)
+    {
+        @:ids.push("@d.Id");
+    }
 
+    $(function () {
+        $('#sendVals').bind("click", function () {
+            var selectedAnswers = [];
+            @foreach (var d in Model)
+            {
+                @:$('input[name=1]:checked').val();
+                @:selectedAnswers.push($('input[name=1]:checked').val());
+            }
+            $.post("@Url.Action("submitAnswers", "Content")", { values: JSON.stringify(selectedAnswers) });
+            
+        });
+    });
+</script>
 <h2>Quiz</h2>
+<h4>@Model.First().Content.Title</h4>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-@foreach (var item in Model) {
-    var options = (new List<string> { item.answerA, item.answerB, item.answerC }).OrderBy(a => Guid.NewGuid()).ToList();
-    <tr>
-        <th>
+@using (Html.BeginForm("submitAnswers", "Content"))
+{
+    foreach (var item in Model)
+    {
+        var options = (new List<string> { item.answerA, item.answerB, item.answerC }).OrderBy(a => Guid.NewGuid()).ToList();
+
+        <span>
             @Html.DisplayFor(modelItem => item.Question)
-        </th>
+        </span>
 
-        <td>
-            @options[0]
-        </td>
-        <td>
-            @options[1]
-        </td>
-        <td>
-            @options[2]
-        </td>
-    </tr>
+        <div name="@item.Id" required>
+            <label>
+                <input type="radio" name="@item.Id" id="submitAnswers" value="@options[0]" />
+                @options[0]
+            </label><br>
+
+            <label>
+                <input type="radio" name="@item.Id" id="submitAnswers" value="@options[1]" />
+                @options[1]
+            </label><br>
+
+            <label>
+                <input type="radio" name="@item.Id" id="submitAnswers" value="@options[2]" />
+                @options[2]
+            </label><br>
+        </div>
+        <br>
+    }
+
+    <input type="button" id="sendVals" value="Button2" />
+
 }
-
-</table>
