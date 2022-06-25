@@ -20,7 +20,7 @@
             </div>
             <div class="navbar-collapse collapse" style="float:right">
                 <ul class="nav navbar-nav">
-                    @if (string.IsNullOrEmpty(Session["id"].ToString()))
+                    @if (Session["id"] == null)
                     {
                         <li>@Html.ActionLink("Login", "Login", "UserAccess")</li>
                         <li>@Html.ActionLink("Register", "Register", "UserAccess")</li>

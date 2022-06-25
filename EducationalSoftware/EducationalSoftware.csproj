@@ -221,10 +221,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\UserAccess\Login.cshtml" />
     <Content Include="Views\UserAccess\Register.cshtml" />
+    <Content Include="Views\Content\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Content\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

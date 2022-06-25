@@ -10,7 +10,7 @@
 </style>
 
 <h2>Welcome to the Educational Software Platform</h2>
-@if (string.IsNullOrEmpty(Session["id"].ToString()))
+@if (Session["id"] == null)
 {
     <h5 style="padding-bottom: 10px;">In order to use a user's type function you first must login !</h5>
 }
@@ -33,7 +33,7 @@ else
             </tr>
             <tr>
                 <td>
-                    @Html.ActionLink("Μαθε για Singleton", "Index", "Content", new { contentID = 1 })
+                    <a contentid="1" href="~/Content/Index?contentID=1">Learn about C#</a>
                 </td>
                 <td>
                     @Html.ActionLink("xxxx", "Index", "Content", new { contentID = 2 })
@@ -44,7 +44,7 @@ else
             </tr>
             <tr>
                 <td>
-                    @Html.ActionLink("Μαθε για SOLID", "Index", "Content", new { contentID = 2 })
+                    <a contentid="1" href="~/Content/Index?contentID=2">Learn about Git</a>
                 </td>
                 <td>
                     @Html.ActionLink("xxxx", "GetAppointment", "Doctor")
@@ -55,7 +55,7 @@ else
             </tr>
             <tr>
                 <td>
-                    @Html.ActionLink("Μαθε για C#", "Index", "Content", new { contentID = 3 })
+                    <a contentid="1" href="~/Content/Index?contentID=3">Learn about SQL</a>
                 </td>
                 <td>
                     @Html.ActionLink("xxxx", "DoctorRegisterProfession", "Doctor")
