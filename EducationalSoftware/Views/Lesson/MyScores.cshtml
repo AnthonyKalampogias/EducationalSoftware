@@ -121,12 +121,34 @@ else
 {
     var myScores = (List<EducationalSoftware.Models.Scores>)Model;
 
-    <div class="col-md-10">
-        <label for="start">Select Scores for a specific Date:</label><br>
-        <input type="datetime-local" name="selectedDate" id="selectedDate" value="@ViewData["datePick"]"/> <br />
+    <div>
+
+        <table style="margin-top: 110px; margin-bottom:50px;">
+            <tr><th><h4>Select Scores for a specific Date:</h4></th></tr>
+            <tr>
+                <td>
+                    <div class="col-md-10" style="width: 280px;">
+                        <form action="/Lesson/MyScores" method="post" style="display: inline;">
+                            <input type="text" hidden name="contentID" id="contentID" value="@TempData["contentId"]" />
+                            <input type="date" style="width: 240px; height: 40px; margin-bottom:15px;" name="selectedDate" id="selectedDate" value="@ViewData["datePick"]" /><br />
+                            <input type="submit" value="Search" class="btn btn-default" />
+                        </form>
+                        <form action="/Lesson/MyScores" method="post" style="display: inline;">
+                            <input type="text" hidden name="contentID" id="contentID" value="@TempData["contentId"]" />
+                            <input type="submit" style="margin-left: 42px;" value="Show all results" class="btn btn-default" />
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
-
+    if(ViewData["datePick"] != null)
+    {
+        <div>
+            <h4>Showing results for @(String.Format("{0:M/d/yyyy}", ViewData["datePick"]))</h4>
+        </div>
+    }
     <div>
         @foreach (var score in myScores)
         {

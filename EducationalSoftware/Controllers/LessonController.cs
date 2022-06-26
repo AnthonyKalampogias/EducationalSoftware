@@ -86,6 +86,7 @@ namespace EducationalSoftware.Controllers
         #region Scores methods
         public ActionResult MyScores(int? contentID = null, DateTime? selectedDate = null)
         {
+            TempData["contentId"] = contentID;
             if (Session["id"] == null)
             {
                 ViewData["error"] = "You need to select a chapter first to see your scores!";
