@@ -31,39 +31,20 @@ else
                     Report
                 </th>
             </tr>
-            <tr>
-                <td>
-                    <a contentid="1" href="~/Lesson/Index?contentID=1">Learn about C#</a>
-                </td>
-                <td>
-                    <a contentid="1" href="~/Lesson/Quiz?contentID=1">Take the C# Test</a>
-                </td>
-                <td>
-                    <a contentid="1" href="~/Lesson/MyScores?contentID=1">See your Test results in C#</a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a contentid="1" href="~/Lesson/Index?contentID=2">Learn about Git</a>
-                </td>
-                <td>
-                    @Html.ActionLink("xxxx", "GetAppointment", "Doctor")
-                </td>
-                <td>
-                    @Html.ActionLink("xxxx", "CreateDoctor", "Admin")
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a contentid="1" href="~/Lesson/Index?contentID=3">Learn about SQL</a>
-                </td>
-                <td>
-                    @Html.ActionLink("xxxx", "DoctorRegisterProfession", "Doctor")
-                </td>
-                <td>
-                    @Html.ActionLink("xxxx", "CreatePatient", "Admin")
-                </td>
-            </tr>
+            @foreach (var i in (List<EducationalSoftware.Models.Chapters>)ViewData["Chapters"])
+            {
+                <tr>
+                    <td>
+                        <a contentid="@i.Id" href="~/Lesson/Index?contentID=@i.Id">@i.ChapterTitle</a>
+                    </td>
+                    <td>
+                        <a contentid="@i.Id" href="~/Lesson/Quiz?contentID=@i.Id">@i.ChapterTitle Test</a>
+                    </td>
+                    <td>
+                        <a contentid="@i.Id" href="~/Lesson/MyScores?contentID=@i.Id">@i.ChapterTitle Test results</a>
+                    </td>
+                </tr>
+            }
         </table>
     </div>
 }

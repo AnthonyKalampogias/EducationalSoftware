@@ -15,7 +15,7 @@ namespace EducationalSoftware.Models
     public partial class Tests
     {
         public int Id { get; set; }
-        public int Chapter { get; set; }
+        public int ContentId { get; set; }
         public string Question { get; set; }
         public string answerA { get; set; }
         public string answerB { get; set; }

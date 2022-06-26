@@ -5,13 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="96448e5e489e4f47aab37dd4e3cc465d" Name="Diagram1">
-        <EntityTypeShape EntityType="SoftwareEduModel.Content" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SoftwareEduModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SoftwareEduModel.Tests" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="SoftwareEduModel.Users" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
-        <AssociationConnector Association="SoftwareEduModel.FK_Tests_Content" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="SoftwareEduModel.Scores" Width="1.5" PointX="5.25" PointY="1.125" />
+        <EntityTypeShape EntityType="SoftwareEduModel.Chapters" Width="1.5" PointX="5.75" PointY="2.625" />
+        <EntityTypeShape EntityType="SoftwareEduModel.Content" Width="1.5" PointX="5.75" PointY="4.875" />
+        <EntityTypeShape EntityType="SoftwareEduModel.Scores" Width="1.5" PointX="3" PointY="4.5" />
+        <EntityTypeShape EntityType="SoftwareEduModel.Tests" Width="1.5" PointX="3" PointY="8.25" />
+        <EntityTypeShape EntityType="SoftwareEduModel.Users" Width="1.5" PointX="0.75" PointY="0.75" />
         <AssociationConnector Association="SoftwareEduModel.FK_Scores_Tests" />
+        <AssociationConnector Association="SoftwareEduModel.FK_Tests_Content" />
         <AssociationConnector Association="SoftwareEduModel.FK_Scores_Users" />
       </Diagram>
     </edmx:Diagrams>

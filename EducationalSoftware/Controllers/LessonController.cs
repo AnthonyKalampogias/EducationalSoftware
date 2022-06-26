@@ -23,8 +23,15 @@ namespace EducationalSoftware.Controllers
             var content = new Content();
             using (var db = new SoftwareEduEntities())
             {
-                content = db.Content.FirstOrDefault(x => x.Id == contentID);
-                ViewData["NextChapter"] = db.Content.FirstOrDefault(x => x.Id == contentID + 1);
+                content = db.Content.FirstOrDefault(x => x.Id == contentID); 
+                
+                if(content == null)
+                    //there is a chance that the ID doesnt match so get the list of content for that chapter and fetch the first
+                    content = db.Content.First(x => x.chapId == contentID);
+
+                var contentList = db.Content.Where(x => x.chapId == content.chapId).ToList();
+                var nextId = contentList.IndexOf(content) + 1 < contentList.Count ? contentList[contentList.IndexOf(content) + 1].Id : 0;
+                ViewData["NextChapter"] = db.Content.FirstOrDefault(x => x.Id == nextId);
             }
 
             return View(content);
@@ -41,7 +48,7 @@ namespace EducationalSoftware.Controllers
             }
             var questionList = new List<Tests>();
             using (var db = new SoftwareEduEntities())
-                questionList = db.Tests.Where(x => x.Chapter == contentID).Include(x => x.Content).ToList();
+                questionList = db.Tests.Where(x => x.ContentId == contentID).Include(x => x.Content).ToList();
 
             TempData["correctAnswers"] = questionList;
             TempData["contentID"] = contentID;
@@ -56,13 +63,13 @@ namespace EducationalSoftware.Controllers
             var correctAnswers = (List<Tests>)TempData["correctAnswers"];
 
             int score = 0;
-            var suggestions = new List<string>();
+            var suggestions = new List<int>();
             for (int i = 0; i < correctAnswers.Count; i++)
             {
                 if (correctAnswers[i].answerA == answers[i])
                     score++;
                 else
-                    suggestions.Add(correctAnswers[i].Content.Title.Split(' ').Last() + " " + correctAnswers[i].Question.Replace("\n", "").Replace("\r", ""));
+                    suggestions.Add(correctAnswers[i].ContentId);
             }
 
             using (var db = new SoftwareEduEntities())
@@ -70,11 +77,11 @@ namespace EducationalSoftware.Controllers
                 db.Scores.Add(new Scores
                 {
                     Score = score,
-                    ChapId = chapter,
+                    ContentId = chapter,
                     Total = correctAnswers.Count,
                     UserID = (int)Session["id"],
                     testDate = DateTime.Now,
-                    Suggestion = JsonConvert.SerializeObject(suggestions)
+                    Suggestion = ((double)score / (double)correctAnswers.Count) * 100 < 75 ? JsonConvert.SerializeObject(suggestions) : null
                 });
                 db.SaveChanges();
             }
@@ -105,7 +112,7 @@ namespace EducationalSoftware.Controllers
                         .ToList(); // get scores for all chapters
                 else
                     myScores = db.Scores
-                        .Where(x => x.ChapId == contentID && x.UserID == userId)
+                        .Where(x => x.ContentId == contentID && x.UserID == userId)
                         .Include(x => x.Content)
                         .ToList(); // get for specific chapter
             }

@@ -17,17 +17,18 @@ namespace EducationalSoftware.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Content()
         {
-            this.Tests = new HashSet<Tests>();
             this.Scores = new HashSet<Scores>();
+            this.Tests = new HashSet<Tests>();
         }
     
         public int Id { get; set; }
         public string Title { get; set; }
         public string ChapContent { get; set; }
+        public int chapId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tests> Tests { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Scores> Scores { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Tests> Tests { get; set; }
     }
 }
