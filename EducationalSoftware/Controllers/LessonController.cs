@@ -60,7 +60,7 @@ namespace EducationalSoftware.Controllers
                 if (correctAnswers[i].answerA == answers[i])
                     score++;
                 else
-                    suggestions.Add(correctAnswers[i].Content.Title.Split(' ').Last()+ " " + correctAnswers[i].Question.Replace("\n", ""));
+                    suggestions.Add(correctAnswers[i].Content.Title.Split(' ').Last()+ " " + correctAnswers[i].Question.Replace("\n", "").Replace("\r", ""));
             }
 
             using (var db = new SoftwareEduEntities())
