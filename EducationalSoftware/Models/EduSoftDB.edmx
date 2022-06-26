@@ -23,6 +23,7 @@
           <Property Name="Score" Type="int" Nullable="false" />
           <Property Name="Suggestion" Type="varchar" MaxLength="300" />
           <Property Name="Total" Type="int" Nullable="false" />
+          <Property Name="testDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -202,6 +203,7 @@
           <Property Name="Total" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Content" Relationship="SoftwareEduModel.FK_Scores_Tests" FromRole="Scores" ToRole="Content" />
           <NavigationProperty Name="Users" Relationship="SoftwareEduModel.FK_Scores_Users" FromRole="Scores" ToRole="Users" />
+          <Property Name="testDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <Association Name="FK_Scores_Tests">
           <End Type="SoftwareEduModel.Content" Role="Content" Multiplicity="1" />
@@ -280,6 +282,7 @@
           <EntitySetMapping Name="Scores">
             <EntityTypeMapping TypeName="SoftwareEduModel.Scores">
               <MappingFragment StoreEntitySet="Scores">
+                <ScalarProperty Name="testDate" ColumnName="testDate" />
                 <ScalarProperty Name="Total" ColumnName="Total" />
                 <ScalarProperty Name="Suggestion" ColumnName="Suggestion" />
                 <ScalarProperty Name="Score" ColumnName="Score" />

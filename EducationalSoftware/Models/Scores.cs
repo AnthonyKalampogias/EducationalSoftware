@@ -20,6 +20,7 @@ namespace EducationalSoftware.Models
         public int Score { get; set; }
         public string Suggestion { get; set; }
         public int Total { get; set; }
+        public System.DateTime testDate { get; set; }
     
         public virtual Content Content { get; set; }
         public virtual Users Users { get; set; }
