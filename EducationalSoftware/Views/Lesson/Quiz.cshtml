@@ -18,17 +18,21 @@
             @foreach (var d in Model)
             {
                 @:$('input[name=1]:checked').val();
-                @:selectedAnswers.push($('input[name=1]:checked').val());
+                @:selectedAnswers.push($('input[name=@d.Id]:checked').val());
             }
-            $.post("@Url.Action("submitAnswers", "Content")", { values: JSON.stringify(selectedAnswers) });
-            
+            $.post("@Url.Action("submitAnswers", "Lesson")", { values: JSON.stringify(selectedAnswers) });
+
+            @{
+                ViewData["success"] = "Your answers have been successfully submitted!";
+            }
+                window.location.href = "@Url.Content("~/Home/Index")";
         });
     });
 </script>
 <h2>Quiz</h2>
 <h4>@Model.First().Content.Title</h4>
 
-@using (Html.BeginForm("submitAnswers", "Content"))
+@using (Html.BeginForm("submitAnswers", "Lesson"))
 {
     foreach (var item in Model)
     {

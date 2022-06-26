@@ -18,6 +18,7 @@ namespace EducationalSoftware.Models
         public Content()
         {
             this.Tests = new HashSet<Tests>();
+            this.Scores = new HashSet<Scores>();
         }
     
         public int Id { get; set; }
@@ -26,5 +27,7 @@ namespace EducationalSoftware.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tests> Tests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Scores> Scores { get; set; }
     }
 }

@@ -26,9 +26,9 @@ namespace EducationalSoftware.Models
         }
     
         public virtual DbSet<Content> Content { get; set; }
-        public virtual DbSet<Scores> Scores { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Tests> Tests { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Scores> Scores { get; set; }
     }
 }

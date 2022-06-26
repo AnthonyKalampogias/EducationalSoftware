@@ -15,12 +15,13 @@ namespace EducationalSoftware.Models
     public partial class Scores
     {
         public int Id { get; set; }
-        public int TestID { get; set; }
+        public int ChapId { get; set; }
         public int UserID { get; set; }
         public int Score { get; set; }
         public string Suggestion { get; set; }
+        public int Total { get; set; }
     
-        public virtual Tests Tests { get; set; }
+        public virtual Content Content { get; set; }
         public virtual Users Users { get; set; }
     }
 }

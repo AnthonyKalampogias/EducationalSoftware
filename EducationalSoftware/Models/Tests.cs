@@ -14,12 +14,6 @@ namespace EducationalSoftware.Models
     
     public partial class Tests
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Tests()
-        {
-            this.Scores = new HashSet<Scores>();
-        }
-    
         public int Id { get; set; }
         public int Chapter { get; set; }
         public string Question { get; set; }
@@ -28,7 +22,5 @@ namespace EducationalSoftware.Models
         public string answerC { get; set; }
     
         public virtual Content Content { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Scores> Scores { get; set; }
     }
 }
