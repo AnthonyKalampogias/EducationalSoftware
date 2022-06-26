@@ -14,37 +14,53 @@
 
     $(function () {
         $('#sendVals').bind("click", function () {
-            var selectedAnswers = [];
-            @foreach (var d in Model)
-            {
-                @:$('input[name=1]:checked').val();
-                @:selectedAnswers.push($('input[name=@d.Id]:checked').val());
-            }
-            $.post("@Url.Action("submitAnswers", "Lesson")", { values: JSON.stringify(selectedAnswers) });
+            let allAreFilled = true;
+            document.getElementById("dynamic-form-fields").querySelectorAll("[required]").forEach(function (i) {
+                if (!allAreFilled) return;
+                if (i.type === "radio") {
+                    let radioValueCheck = false;
+                    document.getElementById("myForm").querySelectorAll(`[name=${i.name}]`).forEach(function (r) {
+                        if (r.checked) radioValueCheck = true;
+                    })
+                    allAreFilled = radioValueCheck;
+                    return;
+                }
+                if (!i.value) { allAreFilled = false; return; }
+            })
+            if (allAreFilled) {
+                @foreach (var d in Model)
+                {
+                    @:selectedAnswers.push($('input[name=@d.Id]:checked').val());
+                }
+                $.post("@Url.Action("submitAnswers", "Lesson")", { values: JSON.stringify(selectedAnswers) });
 
-            @{
-                ViewData["success"] = "Your answers have been successfully submitted!";
-            }
+                @{
+                    ViewData["success"] = "Your answers have been successfully submitted!";
+                }
                 window.location.href = "@Url.Content("~/Home/Index")";
+            }
+            else {
+                alert('You have to answer all the questions before you can submit them!');
+            }
         });
     });
 </script>
 <h2>Quiz</h2>
 <h4>@Model.First().Content.Title</h4>
 
-@using (Html.BeginForm("submitAnswers", "Lesson"))
-{
-    foreach (var item in Model)
+<form action="/Lesson/submitAnswers/" id="dynamic-form-fields" method="post">
+    @foreach (var item in Model)
     {
-        var options = (new List<string> { item.answerA, item.answerB, item.answerC }).OrderBy(a => Guid.NewGuid()).ToList();
+    var options = (new List<string>
+        { item.answerA, item.answerB, item.answerC }).OrderBy(a => Guid.NewGuid()).ToList();
 
         <span>
-            @Html.DisplayFor(modelItem => item.Question)
+            @Html.Raw(item.Question)
         </span>
 
         <div name="@item.Id" required>
             <label>
-                <input type="radio" name="@item.Id" id="submitAnswers" value="@options[0]" />
+                <input type="radio" name="@item.Id" id="submitAnswers" value="@options[0]" required />
                 @options[0]
             </label><br>
 
@@ -59,8 +75,7 @@
             </label><br>
         </div>
         <br>
-    }
+        }
 
-    <input type="button" id="sendVals" value="Button2" />
-
-}
+        <input type="button" id="sendVals" value="Submit Answers" />
+</form>
