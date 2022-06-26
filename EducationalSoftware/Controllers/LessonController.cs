@@ -33,6 +33,9 @@ namespace EducationalSoftware.Controllers
                 var nextId = contentList.IndexOf(content) + 1 < contentList.Count ? contentList[contentList.IndexOf(content) + 1].Id : 0;
                 ViewData["NextChapter"] = db.Content.FirstOrDefault(x => x.Id == nextId);
             }
+            
+            if (userCanDoFinal(content.chapId))
+                ViewData["submitFinalTest"] = true;
 
             return View(content);
         }
@@ -87,6 +90,29 @@ namespace EducationalSoftware.Controllers
             }
 
             return RedirectToAction("Index", new { contentID = chapter });
+        }
+
+        public bool userCanDoFinal(int chapId)
+        { 
+            //TODO fix Jquery bug, fill all still cant submit
+            //TODO check if this works
+            //TODO add greek ....
+            //TODO add code for recap exam
+            //TODO fix suggestions code
+            var userId = (int)Session["id"];
+            using (var db = new SoftwareEduEntities())
+            {
+                var chapterIds = db.Content.Where(x => x.chapId == chapId).Select(x => x.Id).ToList();
+                var userScores = db.Scores
+                    .Where(
+                        x => x.UserID == userId &&
+                            chapterIds.Contains(x.ContentId)
+                    ).Select(x => x.ContentId).Distinct().Count();
+
+                if (userScores == chapterIds.Count)
+                    return true;
+            }
+            return false;
         }
         #endregion
 
