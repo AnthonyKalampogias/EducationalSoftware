@@ -21,6 +21,7 @@ namespace EducationalSoftware.Models
         public string Suggestion { get; set; }
         public int Total { get; set; }
         public System.DateTime testDate { get; set; }
+        public int chapId { get; set; }
     
         public virtual Content Content { get; set; }
         public virtual Users Users { get; set; }

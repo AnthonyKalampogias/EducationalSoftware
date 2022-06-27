@@ -17,6 +17,11 @@ namespace EducationalSoftware.Controllers
                     ViewData["Chapters"] = db.Chapters.ToList();
             }
 
+            //TODO get quiz if nothing on ID get error
+            //TODO find a way to save final tests in DB, can't add null to contentID
+            //TODO add greek ....
+            //TODO fix suggestions code
+            
             return View();
         }
     }

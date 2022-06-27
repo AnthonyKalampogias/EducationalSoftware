@@ -32,6 +32,7 @@
           <Property Name="Suggestion" Type="varchar" MaxLength="300" />
           <Property Name="Total" Type="int" Nullable="false" />
           <Property Name="testDate" Type="datetime" Nullable="false" />
+          <Property Name="chapId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Tests">
           <Key>
@@ -39,7 +40,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ContentId" Type="int" Nullable="false" />
-          <Property Name="Question" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Question" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="answerA" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="answerB" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="answerC" Type="varchar" MaxLength="150" Nullable="false" />
@@ -164,6 +165,7 @@
           <Property Name="testDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Content" Relationship="SoftwareEduModel.FK_Scores_Tests" FromRole="Scores" ToRole="Content" />
           <NavigationProperty Name="Users" Relationship="SoftwareEduModel.FK_Scores_Users" FromRole="Scores" ToRole="Users" />
+          <Property Name="chapId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Tests">
           <Key>
@@ -171,7 +173,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ContentId" Type="Int32" Nullable="false" />
-          <Property Name="Question" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Question" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="answerA" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="answerB" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="answerC" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
@@ -252,6 +254,7 @@
           <EntitySetMapping Name="Scores">
             <EntityTypeMapping TypeName="SoftwareEduModel.Scores">
               <MappingFragment StoreEntitySet="Scores">
+                <ScalarProperty Name="chapId" ColumnName="chapId" />
                 <ScalarProperty Name="testDate" ColumnName="testDate" />
                 <ScalarProperty Name="Total" ColumnName="Total" />
                 <ScalarProperty Name="Suggestion" ColumnName="Suggestion" />

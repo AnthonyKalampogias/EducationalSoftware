@@ -61,7 +61,8 @@ namespace EducationalSoftware.Controllers
         [HttpPost]
         public ActionResult submitAnswers(string values)
         {
-            var chapter = (int)TempData["contentID"];
+            var content = (int?)TempData["contentID"] ?? 0;
+            var chapter = (int?)TempData["chapterID"] ?? 0;
             var answers = JsonConvert.DeserializeObject<List<string>>(values);
             var correctAnswers = (List<Tests>)TempData["correctAnswers"];
 
@@ -80,7 +81,8 @@ namespace EducationalSoftware.Controllers
                 db.Scores.Add(new Scores
                 {
                     Score = score,
-                    ContentId = chapter,
+                    ContentId = content,
+                    chapId = chapter,
                     Total = correctAnswers.Count,
                     UserID = (int)Session["id"],
                     testDate = DateTime.Now,
@@ -89,16 +91,112 @@ namespace EducationalSoftware.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index", new { contentID = chapter });
+            return RedirectToAction("Index", new { contentID = content });
+        }
+
+        public ActionResult Final(int chaterpId)
+        {
+            #region Initials
+            if (chaterpId == 0)
+            {
+                ViewData["error"] = "You need to select a chapter to start the final quiz!";
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (!userCanDoFinal(chaterpId))
+            {
+                ViewData["error"] = "You haven't completed all the chapter quized to initiate the final quiz!";
+                return RedirectToAction("Index", "Home");
+            }
+
+            TempData["chapterID"] = chaterpId;
+            var usrId = (int)Session["id"];
+            var finalQuestionsAmount = 25;
+            #endregion
+            
+            #region Get data from DB
+
+            //Bring all chapters content with their questions
+            /// and previous scores if available
+            var content = new List<Content>();
+            var contentIds = new List<int>();
+            var previousScores = new List<Scores>();
+
+            using (var db = new SoftwareEduEntities())
+            {
+                ViewData["chapName"] = db.Chapters.FirstOrDefault(x => x.Id == chaterpId).ChapterTitle;
+                content = db.Content.Where(x => x.chapId == chaterpId).Include(x => x.Tests).ToList();
+                contentIds = content.Select(p => p.Id).ToList();
+                // get previous scores for this chapters contents, get content ids and see if the score id is in those Ids
+                previousScores = db.Scores.Where(x => x.UserID == usrId && contentIds.Contains(x.ContentId)).ToList();
+            }
+            #endregion
+
+            #region Create and fill the Questions List
+
+            // make a fair split of questions between all content questions based on the number of them
+            var takeFromEachContent = finalQuestionsAmount / contentIds.Count();
+
+            // list to add content IDs that have been add for the final test
+            var checkedIds = new List<int>();
+
+            // fill X amount of questions for the final test
+            var finalsQ = new List<Tests>();
+            while (finalsQ.Count < finalQuestionsAmount)
+            {
+                //First check in previous tests if the student needs to improve in something
+                if (previousScores != null)
+                    foreach (var ps in previousScores)
+                        if (!checkedIds.Contains(ps.ContentId) && (((double)ps.Score / (double)ps.Total) * 100 < 75))// if student scored less than 75 percent
+                        {
+                            //Before adding check if there are newer scores for this chapter with better result
+                            if (previousScores.Any(x => ps.ContentId == x.ContentId && ((double)x.Score / (double)x.Total) * 100 >= 75 && x.testDate > ps.testDate))
+                                continue;
+                            // get for this content the questions and randomize them to take X random
+                            var thisChapQuestions = content.Where(x => x.Id == ps.ContentId).SelectMany(x => x.Tests.ToList()).OrderBy(a => Guid.NewGuid()).ToList();
+
+                            // add X amount of questions +3 to see if the student has improved!
+                            finalsQ.AddRange(thisChapQuestions.Take(takeFromEachContent + 3));
+
+                            //add the content ID to the checked ones to not add anymore 
+                            checkedIds.Add(ps.ContentId);
+                        }
+
+                foreach (var i in content)
+                {
+                    if (!checkedIds.Contains(i.Id))
+                    {
+                        // add X amount of questions!
+                        finalsQ.AddRange(i.Tests.OrderBy(a => Guid.NewGuid()).ToList().Take(takeFromEachContent));
+
+                        //add the content ID to the checked ones to not add anymore 
+                        checkedIds.Add(i.Id);
+                    }
+                }
+
+                // Now that all contents have been passed (maybe), check the size of the array if bigger or smaller fix the size of the list
+                if (finalsQ.Count > finalQuestionsAmount)
+                { // if more remove X questions
+                    var howMany = finalsQ.Count - finalQuestionsAmount;
+                    finalsQ.RemoveRange(0, howMany);
+                }
+
+                else if (finalsQ.Count < finalQuestionsAmount)
+                {// if less randomize all questions and take X
+                    var howMany = finalQuestionsAmount - finalsQ.Count;
+                    finalsQ.AddRange(content.SelectMany(x => x.Tests).OrderBy(a => Guid.NewGuid()).ToList().Take(howMany));
+                }
+
+                //shuffle the questions and store them to a temp data to later match them
+                TempData["correctAnswers"] = finalsQ = finalsQ.OrderBy(a => Guid.NewGuid()).ToList();
+            } 
+            #endregion
+
+            return View(finalsQ);
         }
 
         public bool userCanDoFinal(int chapId)
         { 
-            //TODO fix Jquery bug, fill all still cant submit
-            //TODO check if this works
-            //TODO add greek ....
-            //TODO add code for recap exam
-            //TODO fix suggestions code
             var userId = (int)Session["id"];
             using (var db = new SoftwareEduEntities())
             {

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<EducationalSoftware.Models.Tests>
+
+@{
+    ViewBag.Title = "Final Quiz";
+}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+    $(function () {
+        $('#sendVals').bind("click", function () {
+            var selectedAnswers = [];
+            @foreach (var d in Model)
+            {
+                @:selectedAnswers.push($('input[name=@d.Id]:checked').val());
+            }
+
+            if (!(selectedAnswers.includes(undefined)) && selectedAnswers.length == @Model.ToList().Count) {
+                $.post("@Url.Action("submitAnswers", "Lesson")", { values: JSON.stringify(selectedAnswers) });
+                window.location.href = "@Url.Content("~/Home/Index")";
+            }
+            else {
+                alert('You have to answer all questions before you can submit them!');
+            }
+
+        });
+    });
+</script>
+<h2>Final Test</h2>
+<h4>@ViewData["chapName"]</h4>
+
+<form action="/Lesson/submitAnswers/" id="dynamic-form-fields" method="post">
+    @foreach (var item in Model)
+    {
+        var options = (new List<string>
+{ item.answerA, item.answerB, item.answerC }).OrderBy(a => Guid.NewGuid()).ToList();
+
+<span>
+    @Html.Raw(item.Question)
+</span>
+
+<div name="@item.Id" required>
+    <label>
+        <input type="radio" name="@item.Id" id="submitAnswers" value="@options[0]" required />
+        @options[0]
+    </label><br>
+
+    <label>
+        <input type="radio" name="@item.Id" id="submitAnswers" value="@options[1]" />
+        @options[1]
+    </label><br>
+
+    <label>
+        <input type="radio" name="@item.Id" id="submitAnswers" value="@options[2]" />
+        @options[2]
+    </label><br>
+</div>
+<br>
+}
+
+    <input type="button" id="sendVals" value="Submit Answers" />
+</form>

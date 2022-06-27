@@ -232,6 +232,7 @@
     <Content Include="Views\Lesson\Index.cshtml" />
     <Content Include="Views\Lesson\Quiz.cshtml" />
     <Content Include="Views\Lesson\MyScores.cshtml" />
+    <Content Include="Views\Lesson\Final.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
