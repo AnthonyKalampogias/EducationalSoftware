@@ -5,43 +5,22 @@
 }
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script>
-    var ids = [];
-    //get all the question IDs
-    @foreach (var d in Model)
-    {
-        @:ids.push("@d.Id");
-    }
-
     $(function () {
         $('#sendVals').bind("click", function () {
-            let allAreFilled = true;
-            document.getElementById("dynamic-form-fields").querySelectorAll("[required]").forEach(function (i) {
-                if (!allAreFilled) return;
-                if (i.type === "radio") {
-                    let radioValueCheck = false;
-                    document.getElementById("myForm").querySelectorAll(`[name=${i.name}]`).forEach(function (r) {
-                        if (r.checked) radioValueCheck = true;
-                    })
-                    allAreFilled = radioValueCheck;
-                    return;
-                }
-                if (!i.value) { allAreFilled = false; return; }
-            })
-            if (allAreFilled) {
-                @foreach (var d in Model)
-                {
-                    @:selectedAnswers.push($('input[name=@d.Id]:checked').val());
-                }
-                $.post("@Url.Action("submitAnswers", "Lesson")", { values: JSON.stringify(selectedAnswers) });
+            var selectedAnswers = [];
+            @foreach (var d in Model)
+            {
+                @:selectedAnswers.push($('input[name=@d.Id]:checked').val());
+            }
 
-                @{
-                    ViewData["success"] = "Your answers have been successfully submitted!";
-                }
+            if (!(selectedAnswers.includes(undefined)) && selectedAnswers.length == @Model.ToList().Count) {
+                $.post("@Url.Action("submitAnswers", "Lesson")", { values: JSON.stringify(selectedAnswers) });
                 window.location.href = "@Url.Content("~/Home/Index")";
             }
             else {
-                alert('You have to answer all the questions before you can submit them!');
+                alert('You have to answer all questions before you can submit them!');
             }
+
         });
     });
 </script>
