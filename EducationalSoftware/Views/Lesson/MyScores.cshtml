@@ -185,9 +185,24 @@ else
 
                         <td><h3>@score.Score/@score.Total</h3></td>
 
-                        <td> <h4>@score.testDate</h4></td>
+                        <td> <h4>@score.testDate</h4></td> 
 
-                        <td> </td>
+                        <td>
+                            @{ 
+                                if( score.Suggestion != null)
+                                {
+                                    var contIds = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(score.Suggestion);
+                                    foreach (var item in contIds.Select(x => x).Distinct())
+                                    {
+                                        @: @Html.ActionLink(myScores.Select(x => x.Content).FirstOrDefault(x => x.Id == item).Title, "Index", "Lesson/Index", new { contentID = item }, null)
+                                    }
+                                }
+                                else
+                                {
+                                    @:You did great! :)
+                                }
+                            }
+                        </td>
                     </tr>
                 </table>
             </div>
