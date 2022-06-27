@@ -17,6 +17,7 @@ namespace EducationalSoftware.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Users()
         {
+            this.FinalsScores = new HashSet<FinalsScores>();
             this.Scores = new HashSet<Scores>();
         }
     
@@ -27,6 +28,8 @@ namespace EducationalSoftware.Models
         public string LastName { get; set; }
         public int Status { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FinalsScores> FinalsScores { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Scores> Scores { get; set; }
     }

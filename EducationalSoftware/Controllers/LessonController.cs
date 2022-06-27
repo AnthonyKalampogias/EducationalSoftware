@@ -16,7 +16,7 @@ namespace EducationalSoftware.Controllers
         {
             if (contentID == null)
             {
-                ViewData["error"] = "You need to select a chapter to read first!";
+                TempData["error"] = "You need to select a chapter to read first!";
                 return RedirectToAction("Index", "Home");
             }
 
@@ -46,7 +46,7 @@ namespace EducationalSoftware.Controllers
         {
             if (contentID == null)
             {
-                ViewData["error"] = "You need to select a chapter to start a quiz!";
+                TempData["error"] = "You need to select a chapter to start a quiz!";
                 return RedirectToAction("Index", "Home");
             }
             var questionList = new List<Tests>();
@@ -59,10 +59,9 @@ namespace EducationalSoftware.Controllers
         }
 
         [HttpPost]
-        public ActionResult submitAnswers(string values)
+        public void submitAnswers(string values)
         {
-            var content = (int?)TempData["contentID"] ?? 0;
-            var chapter = (int?)TempData["chapterID"] ?? 0;
+            var content = (int)TempData["contentID"];
             var answers = JsonConvert.DeserializeObject<List<string>>(values);
             var correctAnswers = (List<Tests>)TempData["correctAnswers"];
 
@@ -82,7 +81,6 @@ namespace EducationalSoftware.Controllers
                 {
                     Score = score,
                     ContentId = content,
-                    chapId = chapter,
                     Total = correctAnswers.Count,
                     UserID = (int)Session["id"],
                     testDate = DateTime.Now,
@@ -90,22 +88,24 @@ namespace EducationalSoftware.Controllers
                 });
                 db.SaveChanges();
             }
-
-            return RedirectToAction("Index", new { contentID = content });
+            TempData["success"] = $"You have succesfully completed the test for {correctAnswers.First().Content.Title}, you can navigate to My Results to see how you did!";
         }
 
+        #endregion
+
+        #region Final Quiz Methods
         public ActionResult Final(int chaterpId)
         {
             #region Initials
             if (chaterpId == 0)
             {
-                ViewData["error"] = "You need to select a chapter to start the final quiz!";
+                TempData["error"] = "You need to select a chapter to start the final quiz!";
                 return RedirectToAction("Index", "Home");
             }
 
             if (!userCanDoFinal(chaterpId))
             {
-                ViewData["error"] = "You haven't completed all the chapter quized to initiate the final quiz!";
+                TempData["error"] = "You haven't completed all the chapter quized to initiate the final quiz!";
                 return RedirectToAction("Index", "Home");
             }
 
@@ -113,7 +113,7 @@ namespace EducationalSoftware.Controllers
             var usrId = (int)Session["id"];
             var finalQuestionsAmount = 25;
             #endregion
-            
+
             #region Get data from DB
 
             //Bring all chapters content with their questions
@@ -189,14 +189,49 @@ namespace EducationalSoftware.Controllers
 
                 //shuffle the questions and store them to a temp data to later match them
                 TempData["correctAnswers"] = finalsQ = finalsQ.OrderBy(a => Guid.NewGuid()).ToList();
-            } 
+            }
             #endregion
 
             return View(finalsQ);
         }
 
+        [HttpPost]
+        public void submitAnswersFinals(string values)
+        {
+            var chapter = (int)TempData["chapterID"];
+            var answers = JsonConvert.DeserializeObject<List<string>>(values);
+            var correctAnswers = (List<Tests>)TempData["correctAnswers"];
+
+            int score = 0;
+            var suggestions = new List<int>();
+            for (int i = 0; i < correctAnswers.Count; i++)
+            {
+                if (correctAnswers[i].answerA == answers[i])
+                    score++;
+                else
+                    suggestions.Add(correctAnswers[i].ContentId);
+            }
+
+            string chapName;
+            using (var db = new SoftwareEduEntities())
+            {
+                chapName = db.Chapters.FirstOrDefault(x => x.Id == chapter).ChapterTitle;
+                db.FinalsScores.Add(new FinalsScores
+                {
+                    Score = score,
+                    chapId = chapter,
+                    Total = correctAnswers.Count,
+                    UserID = (int)Session["id"],
+                    testDate = DateTime.Now,
+                    Suggestion = ((double)score / (double)correctAnswers.Count) * 100 < 75 ? JsonConvert.SerializeObject(suggestions) : null
+                });
+                db.SaveChanges();
+            }
+            TempData["success"] = $"You have succesfully completed the final test for {chapName}, you can navigate to My Results to see how you did!";
+        }
+
         public bool userCanDoFinal(int chapId)
-        { 
+        {
             var userId = (int)Session["id"];
             using (var db = new SoftwareEduEntities())
             {
@@ -220,7 +255,7 @@ namespace EducationalSoftware.Controllers
             TempData["contentId"] = contentID;
             if (Session["id"] == null)
             {
-                ViewData["error"] = "You need to select a chapter first to see your scores!";
+                TempData["error"] = "Looks like you are not logged in..";
                 return RedirectToAction("Index", "Home");
             }
 
@@ -233,11 +268,48 @@ namespace EducationalSoftware.Controllers
                     myScores = db.Scores
                         .Where(x => x.UserID == userId)
                         .Include(x => x.Content)
+                        .Include(x => x.Content.Chapters)
                         .ToList(); // get scores for all chapters
                 else
                     myScores = db.Scores
                         .Where(x => x.ContentId == contentID && x.UserID == userId)
                         .Include(x => x.Content)
+                        .Include(x => x.Content.Chapters)
+                        .ToList(); // get for specific chapter
+            }
+
+            if (selectedDate != null)
+            {
+                ViewData["datePick"] = selectedDate;
+                myScores = myScores.Where(x => x.testDate.Date == selectedDate.Value.Date).ToList();
+            }
+            return View(myScores);
+        }
+
+
+        public ActionResult MyScoresFinals(int? chapId = null, DateTime? selectedDate = null)
+        {
+            TempData["contentId"] = chapId;
+            if (Session["id"] == null)
+            {
+                TempData["error"] = "Looks like you are not logged in..";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var userId = (int)Session["id"];
+            var myScores = new List<FinalsScores>();
+
+            using (var db = new SoftwareEduEntities())
+            {
+                if (chapId == null)
+                    myScores = db.FinalsScores
+                        .Where(x => x.UserID == userId)
+                        .Include(x => x.Chapters)
+                        .ToList(); // get scores for all chapters
+                else
+                    myScores = db.FinalsScores
+                        .Where(x => x.chapId == chapId && x.UserID == userId)
+                        .Include(x => x.Chapters)
                         .ToList(); // get for specific chapter
             }
 

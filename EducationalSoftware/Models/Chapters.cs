@@ -14,7 +14,19 @@ namespace EducationalSoftware.Models
     
     public partial class Chapters
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Chapters()
+        {
+            this.Content = new HashSet<Content>();
+            this.FinalsScores = new HashSet<FinalsScores>();
+        }
+    
         public int Id { get; set; }
         public string ChapterTitle { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Content> Content { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FinalsScores> FinalsScores { get; set; }
     }
 }

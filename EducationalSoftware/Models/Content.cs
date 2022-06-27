@@ -26,6 +26,7 @@ namespace EducationalSoftware.Models
         public string ChapContent { get; set; }
         public int chapId { get; set; }
     
+        public virtual Chapters Chapters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Scores> Scores { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EducationalSoftware.Models.Scores>
+﻿@model IEnumerable<EducationalSoftware.Models.FinalsScores>
 
 
 <style>
@@ -113,23 +113,18 @@
 @if (Model.ToList().Count == 0)
 {
     <h2>
-        You haven't completed any tests yet...<br />
-        Please navigate to the main page and select a subject you wish to learn :)
+        You haven't completed any Final tests yet...<br />
+        Please finish a chapters quizes in order to participate in a Final Test :)
     </h2>
 }
 else
 {
-    var myScores = (List<EducationalSoftware.Models.Scores>)Model;
+    var myScores = (List<EducationalSoftware.Models.FinalsScores>)Model;
 
-    <h1> My Test Scores</h1>
-    
+    <h1> My Final Test Results</h1>
+
     <div>
-        <h4>
-            You can also see your results in the Final Exams,
-            @Html.ActionLink("Go", "MyScoresFinals", "Lesson")
-        </h4>
-    </div>
-    <div>
+
         <table style="margin-top: 50px; margin-bottom:50px;">
             <tr><th><h4>Select Scores for a specific Date:</h4></th></tr>
             <tr>
@@ -150,7 +145,7 @@ else
         </table>
     </div>
 
-    if(ViewData["datePick"] != null)
+    if (ViewData["datePick"] != null)
     {
         <div>
             <h4>Showing results for @(String.Format("{0:M/d/yyyy}", ViewData["datePick"]))</h4>
@@ -163,8 +158,7 @@ else
             double percent = ((double)score.Score / (double)score.Total) * 100;
 
             <div>
-                <h2>@score.Content.Title</h2>
-                <h4>From @score.Content.Chapters.ChapterTitle</h4>
+                <h2>@score.Chapters.ChapterTitle</h2>
                 <table>
                     <tr>
                         <th>

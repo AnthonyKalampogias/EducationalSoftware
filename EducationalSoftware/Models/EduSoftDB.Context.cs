@@ -25,10 +25,11 @@ namespace EducationalSoftware.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Chapters> Chapters { get; set; }
-        public virtual DbSet<Content> Content { get; set; }
-        public virtual DbSet<Scores> Scores { get; set; }
         public virtual DbSet<Tests> Tests { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<FinalsScores> FinalsScores { get; set; }
+        public virtual DbSet<Scores> Scores { get; set; }
+        public virtual DbSet<Chapters> Chapters { get; set; }
+        public virtual DbSet<Content> Content { get; set; }
     }
 }

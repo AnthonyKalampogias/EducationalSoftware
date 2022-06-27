@@ -12,10 +12,10 @@ namespace EducationalSoftware.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Scores
+    public partial class FinalsScores
     {
         public int Id { get; set; }
-        public int ContentId { get; set; }
+        public int chapId { get; set; }
         public int UserID { get; set; }
         public Nullable<int> Score { get; set; }
         public string Suggestion { get; set; }
@@ -23,6 +23,6 @@ namespace EducationalSoftware.Models
         public System.DateTime testDate { get; set; }
     
         public virtual Users Users { get; set; }
-        public virtual Content Content { get; set; }
+        public virtual Chapters Chapters { get; set; }
     }
 }

@@ -14,7 +14,7 @@
             }
 
             if (!(selectedAnswers.includes(undefined)) && selectedAnswers.length == @Model.ToList().Count) {
-                $.post("@Url.Action("submitAnswers", "Lesson")", { values: JSON.stringify(selectedAnswers) });
+                $.post("@Url.Action("submitAnswersFinals", "Lesson")", { values: JSON.stringify(selectedAnswers) });
                 window.location.href = "@Url.Content("~/Home/Index")";
             }
             else {
@@ -27,7 +27,7 @@
 <h2>Final Test</h2>
 <h4>@ViewData["chapName"]</h4>
 
-<form action="/Lesson/submitAnswers/" id="dynamic-form-fields" method="post">
+<form action="/Lesson/submitAnswersFinals/" id="dynamic-form-fields" method="post">
     @foreach (var item in Model)
     {
         var options = (new List<string>
