@@ -67,6 +67,15 @@
           <Property Name="LastName" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="UserVisits">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="contentId" Type="int" Nullable="false" />
+          <Property Name="counter" Type="int" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Content_Chapters">
           <End Role="Chapters" Type="Self.Chapters" Multiplicity="1" />
           <End Role="Content" Type="Self.Content" Multiplicity="*" />
@@ -139,6 +148,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserVisits_Content">
+          <End Role="Content" Type="Self.Content" Multiplicity="1" />
+          <End Role="UserVisits" Type="Self.UserVisits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Content">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserVisits">
+              <PropertyRef Name="contentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserVisits_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserVisits" Type="Self.UserVisits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserVisits">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="SoftwareEduModelStoreContainer">
           <EntitySet Name="Chapters" EntityType="Self.Chapters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Content" EntityType="Self.Content" Schema="dbo" store:Type="Tables" />
@@ -146,6 +179,7 @@
           <EntitySet Name="Scores" EntityType="Self.Scores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tests" EntityType="Self.Tests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserVisits" EntityType="Self.UserVisits" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Content_Chapters" Association="Self.FK_Content_Chapters">
             <End Role="Chapters" EntitySet="Chapters" />
             <End Role="Content" EntitySet="Content" />
@@ -169,6 +203,14 @@
           <AssociationSet Name="FK_Tests_Content" Association="Self.FK_Tests_Content">
             <End Role="Content" EntitySet="Content" />
             <End Role="Tests" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserVisits_Content" Association="Self.FK_UserVisits_Content">
+            <End Role="Content" EntitySet="Content" />
+            <End Role="UserVisits" EntitySet="UserVisits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserVisits_Users" Association="Self.FK_UserVisits_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserVisits" EntitySet="UserVisits" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -206,6 +248,15 @@
             <End Role="Content" EntitySet="Content" />
             <End Role="Tests" EntitySet="Tests" />
           </AssociationSet>
+          <EntitySet Name="UserVisits" EntityType="SoftwareEduModel.UserVisits" />
+          <AssociationSet Name="FK_UserVisits_Content" Association="SoftwareEduModel.FK_UserVisits_Content">
+            <End Role="Content" EntitySet="Content" />
+            <End Role="UserVisits" EntitySet="UserVisits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserVisits_Users" Association="SoftwareEduModel.FK_UserVisits_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserVisits" EntitySet="UserVisits" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Tests">
           <Key>
@@ -231,6 +282,7 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <NavigationProperty Name="FinalsScores" Relationship="SoftwareEduModel.FK_FinalsScores_Users" FromRole="Users" ToRole="FinalsScores" />
           <NavigationProperty Name="Scores" Relationship="SoftwareEduModel.FK_Scores_Users" FromRole="Users" ToRole="Scores" />
+          <NavigationProperty Name="UserVisits" Relationship="SoftwareEduModel.FK_UserVisits_Users" FromRole="Users" ToRole="UserVisits" />
         </EntityType>
         <EntityType Name="FinalsScores">
           <Key>
@@ -304,6 +356,7 @@
           <NavigationProperty Name="Chapters" Relationship="SoftwareEduModel.FK_Content_Chapters" FromRole="Content" ToRole="Chapters" />
           <NavigationProperty Name="Scores" Relationship="SoftwareEduModel.FK_Scores_Content" FromRole="Content" ToRole="Scores" />
           <NavigationProperty Name="Tests" Relationship="SoftwareEduModel.FK_Tests_Content" FromRole="Content" ToRole="Tests" />
+          <NavigationProperty Name="UserVisits" Relationship="SoftwareEduModel.FK_UserVisits_Content" FromRole="Content" ToRole="UserVisits" />
         </EntityType>
         <Association Name="FK_Content_Chapters">
           <End Type="SoftwareEduModel.Chapters" Role="Chapters" Multiplicity="1" />
@@ -350,6 +403,41 @@
             </Principal>
             <Dependent Role="Tests">
               <PropertyRef Name="ContentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserVisits">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="contentId" Type="Int32" Nullable="false" />
+          <Property Name="counter" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Content" Relationship="SoftwareEduModel.FK_UserVisits_Content" FromRole="UserVisits" ToRole="Content" />
+          <NavigationProperty Name="Users" Relationship="SoftwareEduModel.FK_UserVisits_Users" FromRole="UserVisits" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK_UserVisits_Content">
+          <End Type="SoftwareEduModel.Content" Role="Content" Multiplicity="1" />
+          <End Type="SoftwareEduModel.UserVisits" Role="UserVisits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Content">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserVisits">
+              <PropertyRef Name="contentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserVisits_Users">
+          <End Type="SoftwareEduModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="SoftwareEduModel.UserVisits" Role="UserVisits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserVisits">
+              <PropertyRef Name="userId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -423,6 +511,16 @@
                 <ScalarProperty Name="chapId" ColumnName="chapId" />
                 <ScalarProperty Name="ChapContent" ColumnName="ChapContent" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserVisits">
+            <EntityTypeMapping TypeName="SoftwareEduModel.UserVisits">
+              <MappingFragment StoreEntitySet="UserVisits">
+                <ScalarProperty Name="counter" ColumnName="counter" />
+                <ScalarProperty Name="contentId" ColumnName="contentId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

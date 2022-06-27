@@ -177,6 +177,9 @@
     <Compile Include="Models\Users.cs">
       <DependentUpon>EduSoftDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserVisits.cs">
+      <DependentUpon>EduSoftDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

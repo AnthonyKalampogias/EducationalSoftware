@@ -7,8 +7,8 @@
 
 <div>
 
+    <h5 style="text-align: center; margin-top: 50px; margin-bottom: 100px;">You have visited this page: @ViewData["totalVisits"]</h5>
 
-    <br /><br /><br /><br />
     <button type="button" style="height: 70px; width: 200px; ">
         @Html.ActionLink("Ready to take the Test!", "Quiz", "Lesson", new { contentId = Model.Id }, null)
     </button>

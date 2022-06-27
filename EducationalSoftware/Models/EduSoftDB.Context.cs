@@ -31,5 +31,6 @@ namespace EducationalSoftware.Models
         public virtual DbSet<Scores> Scores { get; set; }
         public virtual DbSet<Chapters> Chapters { get; set; }
         public virtual DbSet<Content> Content { get; set; }
+        public virtual DbSet<UserVisits> UserVisits { get; set; }
     }
 }

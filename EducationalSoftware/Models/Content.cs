@@ -19,6 +19,7 @@ namespace EducationalSoftware.Models
         {
             this.Scores = new HashSet<Scores>();
             this.Tests = new HashSet<Tests>();
+            this.UserVisits = new HashSet<UserVisits>();
         }
     
         public int Id { get; set; }
@@ -31,5 +32,7 @@ namespace EducationalSoftware.Models
         public virtual ICollection<Scores> Scores { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tests> Tests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserVisits> UserVisits { get; set; }
     }
 }

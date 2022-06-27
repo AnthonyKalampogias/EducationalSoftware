@@ -34,13 +34,18 @@ namespace EducationalSoftware.Controllers
                         TempData["error"] = "Something went wrong, pleasae try again!";
                         return RedirectToAction("Index", "Home");
                     }
+
                 var contentList = db.Content.Where(x => x.chapId == content.chapId).ToList();
                 var nextId = contentList.IndexOf(content) + 1 < contentList.Count ? contentList[contentList.IndexOf(content) + 1].Id : 0;
                 ViewData["NextChapter"] = db.Content.FirstOrDefault(x => x.Id == nextId);
             }
             
+            // Check if user can submit for final test
             if (userCanDoFinal(content.chapId))
                 ViewData["submitFinalTest"] = true;
+
+            // Bring to view the visits counter for this content
+            ViewData["totalVisits"] = addNewVisit((int)Session["id"], content.Id);
 
             return View(content);
         }
@@ -235,23 +240,6 @@ namespace EducationalSoftware.Controllers
             TempData["success"] = $"You have succesfully completed the final test for {chapName}, you can navigate to My Results to see how you did!";
         }
 
-        public bool userCanDoFinal(int chapId)
-        {
-            var userId = (int)Session["id"];
-            using (var db = new SoftwareEduEntities())
-            {
-                var chapterIds = db.Content.Where(x => x.chapId == chapId).Select(x => x.Id).ToList();
-                var userScores = db.Scores
-                    .Where(
-                        x => x.UserID == userId &&
-                            chapterIds.Contains(x.ContentId)
-                    ).Select(x => x.ContentId).Distinct().Count();
-
-                if (userScores == chapterIds.Count)
-                    return true;
-            }
-            return false;
-        }
         #endregion
 
         #region Scores methods
@@ -324,6 +312,52 @@ namespace EducationalSoftware.Controllers
                 myScores = myScores.Where(x => x.testDate.Date == selectedDate.Value.Date).ToList();
             }
             return View(myScores);
+        }
+        #endregion
+
+        #region Helper Methods
+        public bool userCanDoFinal(int chapId)
+        {
+            var userId = (int)Session["id"];
+            using (var db = new SoftwareEduEntities())
+            {
+                var chapterIds = db.Content.Where(x => x.chapId == chapId).Select(x => x.Id).ToList();
+                var userScores = db.Scores
+                    .Where(
+                        x => x.UserID == userId &&
+                            chapterIds.Contains(x.ContentId)
+                    ).Select(x => x.ContentId).Distinct().Count();
+
+                if (userScores == chapterIds.Count)
+                    return true;
+            }
+            return false;
+        }
+
+        public int addNewVisit(int usrId, int contId)
+        {
+            using (var db = new SoftwareEduEntities())
+            {
+                var usrVisits = db.UserVisits.FirstOrDefault(x => x.userId == usrId && x.contentId == contId);
+                if(usrVisits == null)
+                {
+                    usrVisits = new UserVisits
+                    {
+                        contentId = contId,
+                        userId = usrId,
+                        counter = 1
+                    };
+                    db.UserVisits.Add(usrVisits);
+                }
+                else
+                {
+                    usrVisits.counter++;
+                    db.Entry(usrVisits).State = EntityState.Modified;
+                }
+
+                db.SaveChanges();
+                return usrVisits.counter;
+            }
         }
         #endregion
     }
