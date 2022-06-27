@@ -19,9 +19,6 @@ namespace EducationalSoftware.Controllers
 
             //TODO ! add greek ....
             //TODO ! docs 🙄
-
-            //TODO OPTION add buttons to do stuff from content
-            
             return View();
         }
     }
