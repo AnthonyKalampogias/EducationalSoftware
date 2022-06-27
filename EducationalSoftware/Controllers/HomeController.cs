@@ -17,7 +17,6 @@ namespace EducationalSoftware.Controllers
                     ViewData["Chapters"] = db.Chapters.ToList();
             }
 
-            //TODO BUG get quiz if nothing on ID get error
             //TODO ! add greek ....
             //TODO ! fix suggestions code
 

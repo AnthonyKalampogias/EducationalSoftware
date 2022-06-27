@@ -27,8 +27,13 @@ namespace EducationalSoftware.Controllers
                 
                 if(content == null)
                     //there is a chance that the ID doesnt match so get the list of content for that chapter and fetch the first
-                    content = db.Content.First(x => x.chapId == contentID);
-
+                    if(db.Content.Any(x => x.chapId == contentID))
+                        content = db.Content.First(x => x.chapId == contentID);
+                    else
+                    {
+                        TempData["error"] = "Something went wrong, pleasae try again!";
+                        return RedirectToAction("Index", "Home");
+                    }
                 var contentList = db.Content.Where(x => x.chapId == content.chapId).ToList();
                 var nextId = contentList.IndexOf(content) + 1 < contentList.Count ? contentList[contentList.IndexOf(content) + 1].Id : 0;
                 ViewData["NextChapter"] = db.Content.FirstOrDefault(x => x.Id == nextId);
