@@ -181,7 +181,32 @@ else
 
                         <td> <h4>@score.testDate</h4></td>
 
-                        <td> </td>
+                        <td>
+                            @{
+                                if (score.Suggestion != null)
+                                {
+                                    var contIds = (Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(score.Suggestion)).Select(x => x).Distinct();
+                                    var titles = new List<EducationalSoftware.Models.Content>();
+
+                                    using (var db = new EducationalSoftware.Models.SoftwareEduEntities())
+                                    {
+                                        titles = db.Content.Where(x => contIds.Contains(x.Id)).ToList();
+                                    }
+
+                                    <ul>
+                                        In order to improve you can take a look again at:
+                                        @foreach (var item in titles)
+                                        {
+                                            @: <li>@Html.ActionLink(item.Title, "Index", "Lesson/Index", new { contentID = item.Id }, null)</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    @:You did great! :)
+                                }
+                            }
+                        </td>
                     </tr>
                 </table>
             </div>

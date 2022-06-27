@@ -18,8 +18,7 @@ namespace EducationalSoftware.Controllers
             }
 
             //TODO ! add greek ....
-            //TODO ! fix suggestions code
-            //TODO ! add how many times read, table with userID and count and just display on the content page
+            //TODO ! docs 🙄
 
             //TODO OPTION add buttons to do stuff from content
             
