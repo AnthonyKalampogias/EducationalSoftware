@@ -183,23 +183,32 @@ else
 
                         <td>
                             @{
+                                // if there is a suggestion and that score is NOT followed by another score that the user has done better, then show the suggestions
                                 if (score.Suggestion != null)
                                 {
-                                    var contIds = (Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(score.Suggestion)).Select(x => x).Distinct();
-                                    var titles = new List<EducationalSoftware.Models.Content>();
-
-                                    using (var db = new EducationalSoftware.Models.SoftwareEduEntities())
+                                    if ((myScores.Any(x => score.chapId == x.chapId && ((double)x.Score / (double)x.Total) * 100 >= 75 && x.testDate > score.testDate)))
                                     {
-                                        titles = db.Content.Where(x => contIds.Contains(x.Id)).ToList();
+                                        @:You have improved from this score!
                                     }
 
-                                    <ul>
-                                        In order to improve you can take a look again at:
-                                        @foreach (var item in titles)
+                                    else
+                                    {
+                                        var contIds = (Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(score.Suggestion)).Select(x => x).Distinct();
+                                        var titles = new List<EducationalSoftware.Models.Content>();
+
+                                        using (var db = new EducationalSoftware.Models.SoftwareEduEntities())
                                         {
-                                            @: <li>@Html.ActionLink(item.Title, "Index", "Lesson/Index", new { contentID = item.Id }, null)</li>
+                                            titles = db.Content.Where(x => contIds.Contains(x.Id)).ToList();
                                         }
-                                    </ul>
+
+                                        <ul>
+                                            In order to improve you can take a look again at:
+                                            @foreach (var item in titles)
+                                            {
+                                                @: <li>@Html.ActionLink(item.Title, "Index", "Lesson/Index", new { contentID = item.Id }, null)</li>
+                                            }
+                                        </ul>
+                                    }
                                 }
                                 else
                                 {

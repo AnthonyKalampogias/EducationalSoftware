@@ -115,7 +115,7 @@ namespace EducationalSoftware.Controllers
 
             if (!userCanDoFinal(chaterpId))
             {
-                TempData["error"] = "You haven't completed all the chapter quized to initiate the final quiz!";
+                TempData["error"] = "You haven't completed all the chapter quizes to initiate the final quiz!";
                 return RedirectToAction("Index", "Home");
             }
 
