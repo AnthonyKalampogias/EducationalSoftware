@@ -23,6 +23,12 @@
     }
 </style>
 
+<script>
+    function Openform() {
+        alert("This is the Home page, First create an account and login, once you are in you will be presented with all the available courses, their tests and your results");
+    }
+</script>
+
 <h2>Welcome to the Educational Software Platform</h2>
 @if (Session["id"] == null)
 {
@@ -79,7 +85,3 @@ else
     {
         <div style="color: white; padding: 5px; background-color: #d13a3a;"><h3>@TempData["error"]</h3></div>
     }
-
-
-
-

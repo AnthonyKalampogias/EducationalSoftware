@@ -1,5 +1,11 @@
 ﻿@model EducationalSoftware.Models.Content
 
+<script>
+    function Openform() {
+        alert("This is the Lessons page, Here you will be presented with the chapters content so you are able to read and understand the theory, at the bottom of the page you can see the number of times that you have read this content and 3 buttons. 1. is to take this contents test to see what you learned in this lesson, 2. A button that can navigate you to the next lesson of this chapter and 3. If you have taken all the Chapters Quizzes you will be presented with a button that allows you to access the Final test.");
+    }
+</script>
+
 <h1>@Model.Title</h1>
 <div>
     @Html.Raw(Model.ChapContent)

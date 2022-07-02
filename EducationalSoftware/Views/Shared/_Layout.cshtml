@@ -37,8 +37,12 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Educational Software</p>
+        <footer style="display: inline-block; width: inherit; ">
+            <div style="display: inline-block; float: left;">
+                Don't know that to do here?
+                <input id="btnDialog" onclick="Openform()" type='button' name='clouds' value='Help' />
+            </div>
+            <div style="display: inline-block; float: right; ">&copy; @DateTime.Now.Year - Educational Software</div>
         </footer>
     </div>
 
