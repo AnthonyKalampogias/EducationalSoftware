@@ -66,5 +66,21 @@ namespace EducationalSoftware.Controllers
             }
             return RedirectToAction("LoginUser", "UserAccess", new { user = usr });
         }
+
+        public ActionResult Logout()
+        {
+            try
+            {
+                Session.Clear();
+                Session.Abandon();
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
     }
 }
