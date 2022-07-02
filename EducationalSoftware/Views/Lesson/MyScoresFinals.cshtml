@@ -136,12 +136,12 @@ else
             <tr>
                 <td>
                     <div class="col-md-10" style="width: 280px;">
-                        <form action="/Lesson/MyScores" method="post" style="display: inline;">
+                        <form action="/Lesson/MyScoresFinals" method="post" style="display: inline;">
                             <input type="text" hidden name="contentID" id="contentID" value="@TempData["contentId"]" />
                             <input type="date" style="width: 240px; height: 40px; margin-bottom:15px;" name="selectedDate" id="selectedDate" value="@ViewData["datePick"]" /><br />
                             <input type="submit" value="Search" class="btn btn-default" />
                         </form>
-                        <form action="/Lesson/MyScores" method="post" style="display: inline;">
+                        <form action="/Lesson/MyScoresFinals" method="post" style="display: inline;">
                             <input type="text" hidden name="contentID" id="contentID" value="@TempData["contentId"]" />
                             <input type="submit" style="margin-left: 42px;" value="Show all results" class="btn btn-default" />
                         </form>
