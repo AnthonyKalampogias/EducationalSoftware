@@ -14,7 +14,7 @@ namespace EducationalSoftware.Controllers
             if(Session["id"] != null)
             {
                 using (var db = new SoftwareEduEntities())
-                    ViewData["Chapters"] = db.Chapters.ToList();
+                    ViewData["Chapters"] = db.Content.ToList();
             }
 
             //TODO ! docs 🙄

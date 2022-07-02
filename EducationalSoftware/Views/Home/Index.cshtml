@@ -51,7 +51,7 @@ else
         <table class="table">
             <tr>
                 <th>
-                    Μαθήματα
+                    Lesson
                 </th>
                 <th>
                     Test
@@ -60,17 +60,17 @@ else
                     Report
                 </th>
             </tr>
-            @foreach (var i in (List<EducationalSoftware.Models.Chapters>)ViewData["Chapters"])
+            @foreach (var i in (List<EducationalSoftware.Models.Content>)ViewData["Chapters"])
             {
                 <tr>
                     <td>
-                        <a contentid="@i.Id" href="~/Lesson/Index?contentID=@i.Id">@i.ChapterTitle</a>
+                        <a contentid="@i.Id" href="~/Lesson/Index?contentID=@i.Id">@i.Title</a>
                     </td>
                     <td>
-                        <a contentid="@i.Id" href="~/Lesson/Quiz?contentID=@i.Id">Take the first @i.ChapterTitle Test</a>
+                        <a contentid="@i.Id" href="~/Lesson/Quiz?contentID=@i.Id">Take the first @i.Title Test</a>
                     </td>
                     <td>
-                        <a contentid="@i.Id" href="~/Lesson/MyScores?contentID=@i.Id">@i.ChapterTitle Test results</a>
+                        <a contentid="@i.Id" href="~/Lesson/MyScores?contentID=@i.Id">@i.Title Test results</a>
                     </td>
                 </tr>
             }
