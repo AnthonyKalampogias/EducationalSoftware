@@ -67,9 +67,10 @@ namespace EducationalSoftware.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("LoginUser", "UserAccess", new { user = usr });
-        } 
+        }
         #endregion
 
+        #region Logout Method
         public ActionResult Logout()
         {
             try
@@ -83,7 +84,8 @@ namespace EducationalSoftware.Controllers
                 Console.WriteLine(e);
                 return RedirectToAction("Index", "Home");
             }
-        }
+        } 
+        #endregion
 
     }
 }

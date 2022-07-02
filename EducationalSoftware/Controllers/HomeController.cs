@@ -17,7 +17,6 @@ namespace EducationalSoftware.Controllers
                     ViewData["Chapters"] = db.Chapters.ToList();
             }
 
-            //TODO ! add greek ....
             //TODO ! docs 🙄
             return View();
         }
