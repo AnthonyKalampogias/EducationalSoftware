@@ -9,7 +9,7 @@ namespace EducationalSoftware.Controllers
 {
     public class UserAccessController : Controller
     {
-        // GET: UserAccess
+        #region Login Methods
         public ActionResult Login()
         {
             if (TempData["message"] != null)
@@ -39,8 +39,10 @@ namespace EducationalSoftware.Controllers
             }
 
             return RedirectToAction("Index", "Home");
-         }
+        }
+        #endregion
 
+        #region Registration Methods
         public ActionResult Register()
         {
             if (TempData["message"] != null)
@@ -50,13 +52,13 @@ namespace EducationalSoftware.Controllers
 
         public ActionResult UserRegister(Users usr)
         {
-            using(var db = new SoftwareEduEntities())
+            using (var db = new SoftwareEduEntities())
             {
                 var alreadyRegistered = db.Users.Any(x => x.Email == usr.Email);
 
                 if (alreadyRegistered)
                 {
-                    ViewBag.message = "Already registered email"; 
+                    ViewBag.message = "Already registered email";
                     return RedirectToAction("Register");
                 }
 
@@ -65,7 +67,8 @@ namespace EducationalSoftware.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("LoginUser", "UserAccess", new { user = usr });
-        }
+        } 
+        #endregion
 
         public ActionResult Logout()
         {
